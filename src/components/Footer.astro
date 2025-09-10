@@ -1,7 +1,36 @@
-<footer>
-    <div>
+---
+import LogoUCT from "../assets/UCT_Logo.png";
+---
+
+<footer class="w-full bg-blue-500 text-white py-10 mt-16">
+    <div class="max-w-7x1 mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Logo + Descripcion -->
         <div>
-            
+            <img src={LogoUCT.src} alt="Logo UCT" width="120" height="40" class="mb-4" />
+            <p>Universidad Católica de Temuco - Mapa interactivo del campus.</p>
+        </div>
+
+        <!-- Navegacion de enlaces -->
+        <div>
+            <h3 class="font-bold mb-3">Enlaces</h3>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Mapa</a></li>
+            <li><a href="#">Información</a></li>
+            <li><a href="#">Contacto</a></li>
+        </div>
+
+        <!-- Contacto -->
+        <div>
+            <h3 class="font-bold mb-3">Contacto</h3>
+            <p>Manuel Montt 56, Temuco Campus San Francisco</p>
+            <p>info@uct.cl</p>
+            <p>+56 452 205 555</p>
+
+            <!-- Iconos -->
+            <a target="_blank" href="#"></a>
+            <a target="_blank" href="#"></a>
+            <a target="_blank" href="#"></a>
+            <a target="_blank" href="#"></a>
         </div>
     </div>
 </footer>
