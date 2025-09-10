@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+/* Efecto underline animado para navegación desktop */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 50%;
+  background: linear-gradient(90deg, #3b82f6, #1e40af);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Animación del hamburger menu */
+#mobile-menu-button.open div:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+#mobile-menu-button.open div:nth-child(2) {
+  opacity: 0;
+}
+
+#mobile-menu-button.open div:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Estado abierto del menú móvil */
+#mobile-menu.open {
+  transform: translateY(0);
+  opacity: 1;
+}
