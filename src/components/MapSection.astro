@@ -1,0 +1,646 @@
+---
+// src/components/MapSection.astro - Imagen más grande
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+
+<!-- Contenedor del mapa con altura adaptativa -->
+<div class="w-full flex flex-col lg:flex-row min-h-screen lg:min-h-0 lg:justify-center lg:items-start lg:max-w-7xl lg:mx-auto lg:px-4">
+  <!-- Panel de filtros vertical -->
+  <div id="filter-panel" class="w-full lg:w-60 xl:w-64 p-3 bg-gray-100 rounded-lg lg:rounded-r-none shadow-sm flex flex-col gap-2 overflow-y-auto max-h-[40vh] lg:max-h-[80vh] order-2 lg:order-1">
+    <h3 class="font-bold text-lg mb-2 flex items-center justify-center lg:justify-start">
+      Filtros 
+      <img src="funnel.svg" alt="" width="20" height="20" class="ml-1">
+    </h3>
+    
+    <div class="flex flex-col gap-2">
+      <!-- Edificio -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="edificio" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Edificio</span>
+      </label>
+
+      <!-- Biblioteca -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="libreria" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Biblioteca</span>
+      </label>
+
+      <!-- Baños -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="baños" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Baños</span>
+      </label>
+
+      <!-- Tesorería -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="tesoreria" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Tesorería</span>
+      </label>
+
+      <!-- Calistenia -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="calistenia" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Calistenia</span>
+      </label>
+
+      <!-- Casino / Comedor -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="comer" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Casino/Cafeteria</span>
+      </label>
+      
+      <!-- Gimnasio -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="gym" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Gimnasio</span>
+      </label>
+
+      <!-- Estacionamiento -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="estacionamiento" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Estacionamiento</span>
+      </label>
+
+      <!-- Estacionamiento bicicletas -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="bicicletas" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Estacionamiento bicicletas</span>
+      </label>
+
+      <!-- Servicio de impresiones -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="impresion" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">Servicio de impresiones</span>
+      </label>
+
+      <!-- DAAS -->
+      <label class="ios-checkbox blue flex items-center gap-2">
+        <input type="checkbox" class="marker-filter sr-only" data-type="daas" checked>
+        <div class="checkbox-wrapper">
+          <div class="checkbox-bg"></div>
+          <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                  stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
+          </svg>
+        </div>
+        <span class="text-sm text-gray-700 font-medium">DAAS</span>
+      </label>
+
+      <div class="flex gap-2 mt-2 items-center justify-center">
+        <button id="select-all" class="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm transition-colors">Todos</button>
+        <button id="deselect-all" class="px-2 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm transition-colors">Ninguno</button>
+      </div>
+
+      <button id="fullscreen-btn" class="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm flex items-center justify-center gap-1">
+          <span id="fullscreen-icon"><img src="fullscreen.svg" alt="" width="18" height="18"></span>
+          <span id="fullscreen-text">Pantalla Completa</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenedor del mapa -->
+  <div class="flex-1 flex justify-center order-1 lg:order-2 lg:pl-4">
+    <div id="map-wrapper" class="relative rounded-lg lg:rounded-l-none overflow-hidden bg-gray-200 w-full h-[50vh] sm:h-[60vh] lg:h-[80vh] max-w-full">
+      <div id="enhanced-map" class="w-full h-full lg:w-[112vh] transition-all duration-300"></div>
+      
+      <button id="exit-fullscreen" class="hidden absolute top-4 right-4 z-[1000] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+        <img src="shrink.svg" alt="" width="18" height="18"> Salir
+      </button>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Variables globales
+  let map = {}, bounds = {}, width = {}, height = {};
+  let customMarkers = [];
+
+  // Configurar iconos por defecto
+  delete L.Icon.Default.prototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
+  });
+
+    // Crear un icono personalizado con SVG
+    // iconPath: ruta de tu SVG sin fondo
+    // color: color de fondo del marcador
+    const createMarkerWithSVG = (iconPath, color) => L.divIcon({
+      html: `
+        <svg width="35" height="45" viewBox="0 0 24 24">
+          <!-- Fondo tipo Google Maps -->
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="${color}"/>
+          <!-- Icono dentro -->
+          <image href="${iconPath}" x="7" y="5" height="10" width="10"/>
+        </svg>
+      `,
+      className: '',
+      iconSize: [75, 90],      // tamaño total del marcador
+      iconAnchor: [17, 45],    // punta de la gota coincide con coordenada
+      popupAnchor: [0, -45]    // popup encima del marcador
+    });
+
+    // Iconos personalizados
+    const customIcons = {
+        edificio: createMarkerWithSVG('../markers/building.svg', '#3B82F6'),
+        libreria: createMarkerWithSVG('/markers/library.svg', '#10B981'),
+        laboratorio: createMarkerWithSVG('/markers/lab.svg', '#F59E0B'),
+        comer: createMarkerWithSVG('/markers/utensils.svg', '#EF4444'),
+        estacionamiento: createMarkerWithSVG('/markers/parking.svg', '#6366F1'),
+        baños: createMarkerWithSVG('/markers/toilet.svg', '#6B7280'),
+        bicicletas: createMarkerWithSVG('/markers/bike.svg', '#F97316'),
+        gym: createMarkerWithSVG('/markers/dumbbell.svg', '#8B5CF6'),
+        calistenia: createMarkerWithSVG('/markers/biceps-flexed.svg', '#EC4899'),
+        impresion: createMarkerWithSVG('/markers/printer.svg', '#14B8A6'),
+        daas: createMarkerWithSVG('/markers/notebook-pen.svg', '#F43F5E'),
+        tesoreria: createMarkerWithSVG('/markers/wallet.svg', '#22C55E')
+    };
+  // Crear imagen para obtener dimensiones reales
+  const img = new Image();
+  
+  img.onload = function() {
+  width = this.naturalWidth;
+  height = this.naturalHeight;
+
+  map = L.map('enhanced-map', {
+    crs: L.CRS.Simple,
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+    minZoom: -1,
+    maxZoom: 0.5,
+    zoomControl: true,
+    tap: true,
+    touchZoom: true,
+    doubleClickZoom: true,
+    scrollWheelZoom: true,
+    boxZoom: true,
+    keyboard: true,
+    dragging: true,
+    attributionControl: false
+  });
+    // Bounds exactos según la imagen
+    bounds = [[0, 0], [height, width]];
+    
+    // Agregar imagen
+    L.imageOverlay('/Map.png', bounds).addTo(map);
+
+    // Ajustar la vista exactamente a la imagen
+    map.fitBounds(bounds);
+
+    // Limitar el área de paneo a la imagen
+    map.setMaxBounds(bounds);
+    
+    // Centrar vista inicial
+    map.setView([height / 2, width / 2], -1); // 👈 centrado y con zoom inicial = 1
+
+    // Marcadores con iconos personalizados
+    const predefinedMarkers = [
+        { pos: [height * 0.277, width * 0.323], name: "Edificio 1", type: "edificio", description: "Edificio de informaciones y asistentes sociales" },
+        { pos: [height * 0.394, width * 0.407], name: "Edificio 2", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.443, width * 0.549], name: "Edificio 3", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.504, width * 0.487], name: "Biblioteca", type: "libreria", description: "Venta de libros y sala de estudio" },
+        { pos: [height * 0.533, width * 0.667], name: "Servicio de impresiones", type: "impresion", description: "Libreria con servicio de impresiones" },
+        { pos: [height * 0.59, width * 0.705], name: "DAAS", type: "daas", description: "Dirección de Acompañamiento Académico y Socioemocional" },
+        { pos: [height * 0.77, width * 0.88], name: "Tesoreria", type: "tesoreria", description: "Gestión de todos los pagos y trámites financieros de la universidad, incluyendo aranceles, matrículas y deudas. También cuenta con cajas para atención directa a estudiantes y personas." },
+        { pos: [height * 0.92, width * 0.575], name: "Edificio 12", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.842, width * 0.515], name: "Edificio 13", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.767, width * 0.45], name: "Edificio 14", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.654, width * 0.376], name: "Edificio 15", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.497, width * 0.255], name: "Edificio 16", type: "edificio", description: "Edificio de carrerras tecnicas" },
+        { pos: [height * 0.418, width * 0.233], name: "Edificio 17", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.36, width * 0.597], name: "Edificio 21", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.35, width * 0.47], name: "Biblioteca Central", type: "libreria", description: "Recursos académicos y salas de estudio" },
+        { pos: [height * 0.49, width * 0.64], name: "Cafetería", type: "comer", description: "Cafeteria para todo publico" },
+        { pos: [height * 0.79, width * 0.67], name: "Comedor", type: "comer", description: "Comedor piso 1, edificio" },
+        { pos: [height * 0.757, width * 0.81], name: "Estacionamiento", type: "estacionamiento", description: "Zona de estacionamiento para todo publico" },
+        { pos: [height * 0.8, width * 0.77], name: "Baños Públicos", type: "baños", description: "Baños para todo publico, saliendo del comedor" },
+        { pos: [height * 0.42, width * 0.181], name: "Estacionamiento de Bicicletas", type: "bicicletas", description: "Zona segura para estacionar bicicletas" },
+        { pos: [height * 0.63, width * 0.395], name: "Gimnasio", type: "gym", description: "Gimnasio en edificio 15, cuenta con dos pisos, piso 3 maquinas de ejercicio, piso 4 multifuncional" },
+        { pos: [height * 0.56, width * 0.64], name: "Zona de Calistenia", type: "calistenia", description: "Área al aire libre para ejercicios de calistenia o de fuerza" }
+    ];
+
+    // Guardamos referencias a los marcadores por tipo
+    const markersByType = {};
+
+    // Crear marcadores y agregarlos al mapa
+    predefinedMarkers.forEach(marker => {
+        const icon = customIcons[marker.type];
+        if (!icon) return;
+
+        const leafletMarker = L.marker(marker.pos, { icon })
+          .addTo(map)
+          .bindPopup(`
+            <div class="p-2">
+              <h3 class="font-bold text-lg mb-2">${marker.name}</h3>
+              <p class="text-sm text-gray-600 mb-2">${marker.description}</p>
+              <div class="text-xs text-gray-500">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Ir a vista 360</button>
+            </div>
+          `, {
+            autoPan: true, // Automáticamente ajusta la vista para mostrar el popup completo
+            autoPanPadding: [10, 10], // Padding alrededor del popup
+            keepInView: true // Mantiene el popup visible en el mapa
+          });
+        // Guardar referencia por tipo
+        if (!markersByType[marker.type]) markersByType[marker.type] = [];
+        markersByType[marker.type].push(leafletMarker);
+    });
+
+    // Función para actualizar visibilidad según checkbox
+    function updateMarkers() {
+      document.querySelectorAll('.marker-filter').forEach(cb => {
+        const type = cb.dataset.type;
+        const show = cb.checked;
+        markersByType[type]?.forEach(marker => {
+          if (show) {
+            marker.addTo(map);
+          } else {
+            map.removeLayer(marker);
+          }
+        });
+      });
+    }
+
+    // Event listeners para checkboxes
+    document.querySelectorAll('.marker-filter').forEach(cb => {
+      cb.addEventListener('change', updateMarkers);
+    });
+
+    // Botones Todos/Ninguno
+    document.getElementById('select-all')!.addEventListener('click', () => {
+      document.querySelectorAll('.marker-filter').forEach(cb => cb.checked = true);
+      updateMarkers();
+    });
+
+    document.getElementById('deselect-all')!.addEventListener('click', () => {
+      document.querySelectorAll('.marker-filter').forEach(cb => cb.checked = false);
+      updateMarkers();
+    });
+
+    // Eventos para mejorar la experiencia
+    map.on('zoom', function() {
+      const zoomLevel = map.getZoom();
+      console.log('Zoom level:', zoomLevel);
+    });
+
+    map.on('moveend', function() {
+      const center = map.getCenter();
+    });
+  };
+
+  img.src = '/Map.png';
+
+  // CONTROLES DE INTERFAZ
+
+  // Pantalla completa
+  document.getElementById('fullscreen-btn')!.addEventListener('click', function() {
+  const mapWrapper = document.getElementById('map-wrapper')!;
+  const exitBtn = document.getElementById('exit-fullscreen')!;
+  const mapDiv = document.getElementById('enhanced-map')!;
+  
+  if (!document.fullscreenElement) {
+    mapWrapper.requestFullscreen().then(() => {
+      mapDiv.style.width = '100vw';
+      mapDiv.style.height = '100vh';
+      setTimeout(() => {
+        map.invalidateSize();
+        map.fitBounds(bounds);
+      }, 300);
+      exitBtn.classList.remove('hidden');
+    });
+  }
+});
+
+  // Salir de pantalla completa
+  document.addEventListener('fullscreenchange', function() {
+  const mapDiv = document.getElementById('enhanced-map')!;
+  const exitBtn = document.getElementById('exit-fullscreen')!;
+  
+  if (!document.fullscreenElement) {
+    mapDiv.style.width = '100vh'; // vuelve al tamaño anterior
+    mapDiv.style.height = window.innerWidth < 640 ? '70vh' : '80vh';
+    exitBtn.classList.add('hidden');
+    document.exitFullscreen();
+    setTimeout(() => {
+      map.invalidateSize();
+      map.fitBounds(bounds);
+    }, 300);
+  }
+
+    exitBtn.addEventListener('click', function() {
+        document.exitFullscreen();
+    });
+});
+
+  // Event listener para cambios de pantalla completa
+  document.addEventListener('fullscreenchange', function() {
+    const mapDiv = document.getElementById('enhanced-map')!;
+    const exitBtn = document.getElementById('exit-fullscreen')!;
+    
+    if (!document.fullscreenElement) {
+      mapDiv.style.height = window.innerWidth < 640 ? '70vh' : '80vh';
+      exitBtn.classList.add('hidden');
+      document.getElementById('fullscreen-text')!.textContent = 'Pantalla Completa';
+      setTimeout(() => map && map.invalidateSize(), 100);
+    }
+  });
+
+  // Redimensionar mapa cuando cambia el tamaño de ventana
+  window.addEventListener('resize', function() {
+    if (map) {
+      setTimeout(() => map.invalidateSize(), 100);
+    }
+  });
+});
+
+</script>
+
+<style>
+#enhanced-map {
+  z-index: 1;
+}
+
+/* Estilos para pantalla completa */
+#map-wrapper:fullscreen {
+  background: black;
+}
+
+#map-wrapper:fullscreen #enhanced-map {
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0;
+}
+
+
+/* Estilos para iconos personalizados */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Mejorar controles de Leaflet */
+.leaflet-control-zoom {
+  border-radius: 8px !important;
+}
+
+/* Ocultar la atribución de Leaflet */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+
+.leaflet-control-zoom a {
+  border-radius: 4px;
+}
+
+/* Mejorar popups */
+.leaflet-popup-content {
+  font-family: inherit;
+  margin: 8px 12px;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+  .leaflet-control-zoom {
+    transform: scale(1.2);
+  }
+  
+  .leaflet-popup-content {
+    font-size: 14px;
+  }
+}
+
+/* Animaciones suaves */
+.transition-colors {
+  transition: background-color 0.2s ease;
+}
+
+/* Mejorar accesibilidad táctil */
+@media (pointer: coarse) {
+  button {
+    min-height: 44px;
+  }
+  
+  .leaflet-control-zoom a {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+
+/* From Uiverse.io by kyle1dev */ 
+.checkbox-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Reemplaza la regla .ios-checkbox por esta */
+.ios-checkbox {
+  --checkbox-size: 21px;
+  --checkbox-color: #3b82f6;
+  --checkbox-bg: #dbeafe;
+  --checkbox-border: #93c5fd;
+
+  position: relative;
+  display: inline-flex;        /* <-- cambiar a inline-flex */
+  align-items: center;         /* centra checkbox y texto verticalmente */
+  gap: 0.5rem;                 /* espacio entre checkbox y texto */
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+.ios-checkbox input {
+  display: none;
+}
+
+.checkbox-wrapper {
+  position: relative;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.checkbox-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  border: 2px solid var(--checkbox-border);
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.checkbox-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 80%;
+  height: 80%;
+  color: white;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+
+.check-path {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  transition: stroke-dashoffset 0.3s ease 0.1s;
+}
+
+/* Checked State */
+.ios-checkbox input:checked + .checkbox-wrapper .checkbox-bg {
+  background: var(--checkbox-color);
+  border-color: var(--checkbox-color);
+}
+
+.ios-checkbox input:checked + .checkbox-wrapper .checkbox-icon {
+  transform: scale(1);
+}
+
+.ios-checkbox input:checked + .checkbox-wrapper .check-path {
+  stroke-dashoffset: 0;
+}
+
+/* Hover Effects */
+.ios-checkbox:hover .checkbox-wrapper {
+  transform: scale(1.05);
+}
+
+/* Active Animation */
+.ios-checkbox:active .checkbox-wrapper {
+  transform: scale(0.95);
+}
+
+/* Focus Styles */
+.ios-checkbox input:focus + .checkbox-wrapper .checkbox-bg {
+  box-shadow: 0 0 0 4px var(--checkbox-bg);
+}
+
+/* Color Themes */
+.ios-checkbox.blue {
+  --checkbox-color: #3b82f6;
+  --checkbox-bg: #dbeafe;
+  --checkbox-border: #93c5fd;
+}
+
+.ios-checkbox.green {
+  --checkbox-color: #10b981;
+  --checkbox-bg: #d1fae5;
+  --checkbox-border: #6ee7b7;
+}
+
+.ios-checkbox.purple {
+  --checkbox-color: #8b5cf6;
+  --checkbox-bg: #ede9fe;
+  --checkbox-border: #c4b5fd;
+}
+
+.ios-checkbox.red {
+  --checkbox-color: #ef4444;
+  --checkbox-bg: #fee2e2;
+  --checkbox-border: #fca5a5;
+}
+
+/* Animation */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.ios-checkbox input:checked + .checkbox-wrapper {
+  animation: bounce 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+</style>
