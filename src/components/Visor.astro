@@ -1,0 +1,73 @@
+
+<div id="panorama" ></div>
+
+</style>
+<script>
+  const viewer = pannellum.viewer('panorama', {
+    default: {
+        firstScene: 'entrada',
+        sceneFadeDuration: 2000,
+        preview: "./load_img_uct.webp",
+        strings: {
+        loadButtonLabel: "Haz click aquí para cargar el tour"
+    }
+    },
+
+    scenes: {
+      entrada: {
+        title: "Entrada principal",
+        type: "equirectangular",
+        panorama: "./360_img/Ext_01.jpg",
+        pitch: 0,
+        yaw: 0,
+        minHfov: 80,  // zoom máximo (más cerca)
+        maxHfov: 130,
+        hfov: 130,
+        hotSpots: [
+          {
+            pitch: -10,
+            yaw: -3,
+            type: "scene",
+            text: "Avanzar",
+            sceneId: "ext_02"
+          }
+        ]
+      },
+
+      ext_02: {
+        type: "equirectangular",
+        panorama: "./360_img/Ext_02.webp",
+        pitch: 0,
+        yaw: 180,
+        hfov: 120,
+        hotSpots: [
+          {
+            pitch: -2,
+            yaw: 170,
+            type: "scene",
+            text: "Avanzar",
+            sceneId: "ext_03"
+          }
+        ]
+      },
+
+      ext_03: {
+        type: "equirectangular",
+        panorama: "./360_img/Ext_03.webp",
+        pitch: 0,
+        yaw: 0,
+        hfov: 120,
+        hotSpots: [
+          {
+            pitch: -7,
+            yaw: -10,
+            type: "scene",
+            text: "Avanzar",
+            sceneId: "ext_04"
+          }
+        ]
+      }
+      
+    }
+  });
+</script>

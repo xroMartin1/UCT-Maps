@@ -2,16 +2,16 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Layout from '../layouts/Layout.astro';
+import Visor from "../components/Visor.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-
-	
-	<main class="h-screen bg-gray-100">
+	<main class="h-screen">
 		<Navbar />
+		
 		<section class="min-h-screen flex items-center justify-center px-4 py-8">
 
         <div class="max-w-7xl mx-auto w-full">
@@ -49,8 +49,11 @@ import Layout from '../layouts/Layout.astro';
             </div>
         </div>
     </section>
-		
 
-
+	<section class="flex items-center bg-gray-200 h-screen ">
+		<div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[75vh] mx-auto">
+			<Visor />
+		</div>
+	</section>
 	<Footer />
 </Layout>

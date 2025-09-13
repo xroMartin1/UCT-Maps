@@ -36,3 +36,7 @@
   transform: translateY(0);
   opacity: 1;
 }
+
+.pnlm-load-box {
+    display: none !important;
+}
