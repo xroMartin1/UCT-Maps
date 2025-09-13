@@ -2,14 +2,11 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Layout from '../layouts/Layout.astro';
-<<<<<<< HEAD
 import Visor from "../components/Visor.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
-=======
 import MapSection from '../components/MapSection.astro';
->>>>>>> a7621e792d01cf9f9b967cc19064d54cf7bbba20
 ---
 
 <Layout>
@@ -18,7 +15,6 @@ import MapSection from '../components/MapSection.astro';
 		
 		<section class="min-h-screen flex items-center justify-center px-4 py-8">
 
-<<<<<<< HEAD
         <div class="max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 <!-- Contenido izquierdo -->
@@ -53,31 +49,23 @@ import MapSection from '../components/MapSection.astro';
                 </div>
             </div>
         </div>
+		<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+			<a href="#visor-section" class="scroll-btn w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+        	<svg class="w-6 h-6 text-white bounce-arrow group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        	</svg>
+    		</a>
+		</div>
+		
+
     </section>
 
-	<section class="flex items-center bg-gray-200 h-screen ">
+	<section class="flex items-center bg-gray-200 h-screen" id="visor-section">
 		<div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[75vh] mx-auto">
 			<Visor />
 		</div>
 	</section>
-=======
-	<main>
-		<div>
-			<h1>Explora el Mapa Interactivo de la UCT</h1>
-			<h2>Recorre nuestro campus de manera digital. Encuentra aulas, bibliotecas, cafeterias y mucho más desde cualquier dispositivo.</h2>
-		</div>
-		
-		<div>
-			<button></button>
-			<button></button>
-		</div>
-		
-		<div>
-			<img src="/Monitos.svg" alt="Descripción de la imagen" width="500" height="500"/>
-		</div>
-		
-	</main>
+
 	<MapSection />
->>>>>>> a7621e792d01cf9f9b967cc19064d54cf7bbba20
 	<Footer />
 </Layout>
