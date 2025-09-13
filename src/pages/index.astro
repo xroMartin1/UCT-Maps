@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Layout from '../layouts/Layout.astro';
 import Visor from "../components/Visor.astro";
-
 import MapSection from '../components/MapSection.astro';
 ---
 
@@ -63,7 +62,38 @@ import MapSection from '../components/MapSection.astro';
 			<Visor />
 		</div>
 	</section>
-
+    
 	<MapSection />
 	<Footer />
 </Layout>
+<script>
+      import Lenis from 'lenis';
+
+      // Inicializar Lenis cuando el DOM esté listo
+      document.addEventListener('DOMContentLoaded', function() {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smooth: true
+        });
+
+        // Loop de animación para Lenis
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Configurar todos los botones de scroll
+        const scrollButtons = document.querySelectorAll('[href^="#"]');
+        scrollButtons.forEach(button => {
+          button.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href.startsWith('#')) {
+              e.preventDefault();
+              lenis.scrollTo(href);
+            }
+          });
+        });
+      });
+    </script>
