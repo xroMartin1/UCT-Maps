@@ -4,6 +4,11 @@ import Footer from '../components/Footer.astro';
 import Layout from '../layouts/Layout.astro';
 import Visor from "../components/Visor.astro";
 
+<<<<<<< HEAD
+=======
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+>>>>>>> c064404dda768ac0ff65d94b5c13c64bb0a99b68
 import MapSection from '../components/MapSection.astro';
 ---
 
@@ -47,13 +52,26 @@ import MapSection from '../components/MapSection.astro';
                 </div>
             </div>
         </div>
+		<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+			<a href="#visor-section" class="scroll-btn w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+        	<svg class="w-6 h-6 text-white bounce-arrow group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        	</svg>
+    		</a>
+		</div>
+		
+
     </section>
 
-	<section class="flex items-center bg-gray-200 h-screen ">
+	<section class="flex items-center bg-gray-200 h-screen" id="visor-section">
 		<div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[75vh] mx-auto">
 			<Visor />
 		</div>
 	</section>
+<<<<<<< HEAD
+=======
+
+>>>>>>> c064404dda768ac0ff65d94b5c13c64bb0a99b68
 	<MapSection />
 	<Footer />
 </Layout>
