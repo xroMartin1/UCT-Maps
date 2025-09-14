@@ -9,9 +9,7 @@ import MapSection from '../components/MapSection.astro';
 <Layout>
 	<main class="h-screen">
 		<Navbar />
-		
-		<section class="min-h-screen flex items-center justify-center px-4 py-8">
-
+		<section class="min-h-screen flex items-center justify-center px-4 py-8" id="main-section">
         <div class="max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 <!-- Contenido izquierdo -->
@@ -46,6 +44,7 @@ import MapSection from '../components/MapSection.astro';
                 </div>
             </div>
         </div>
+    <!-- Botón de desplazamiento -->
 		<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
 			<a href="#visor-section" class="scroll-btn w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
         	<svg class="w-6 h-6 text-white bounce-arrow group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -56,14 +55,16 @@ import MapSection from '../components/MapSection.astro';
 		
 
     </section>
+  </main>
 
 	<section class="flex items-center bg-gray-200 h-screen" id="visor-section">
-		<div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[75vh] mx-auto">
+		<div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[80vh] mx-auto mt-15">
 			<Visor />
 		</div>
 	</section>
     
 	<MapSection />
+
 	<Footer />
 </Layout>
 <script>

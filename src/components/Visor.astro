@@ -1,5 +1,5 @@
 
-<div id="panorama" ></div>
+<div id="panorama" data-lenis-prevent></div>
 
 </style>
 <script>
@@ -21,8 +21,8 @@
         pitch: 0,
         yaw: 0,
         minHfov: 80,  // zoom máximo (más cerca)
-        maxHfov: 130,
-        hfov: 130,
+        maxHfov: 120,
+        hfov: 120,
         hotSpots: [
           {
             pitch: -10,
@@ -36,7 +36,7 @@
 
       ext_02: {
         type: "equirectangular",
-        panorama: "./360_img/Ext_02.webp",
+        panorama: "./360_img/Ext_02.jpg",
         pitch: 0,
         yaw: 180,
         hfov: 120,
@@ -53,7 +53,7 @@
 
       ext_03: {
         type: "equirectangular",
-        panorama: "./360_img/Ext_03.webp",
+        panorama: "./360_img/Ext_03.jpg",
         pitch: 0,
         yaw: 0,
         hfov: 120,
@@ -66,8 +66,41 @@
             sceneId: "ext_04"
           }
         ]
-      }
+      },
+
+      ext_04: {
+        type: "equirectangular",
+        panorama: "./360_img/Ext_04.jpg",
+        pitch: 0,
+        yaw: 0,
+        hfov: 120,
+        hotSpots: [
+          {
+            pitch: -5,
+            yaw: -5,
+            type: "scene",
+            text: "Avanzar",
+            sceneId: "ext_05"
+          }
+        ]
+      },
       
+      ext_05: {
+        type: "equirectangular",
+        panorama: "./360_img/Ext_05.jpg",
+        pitch: 0,
+        yaw: 0,
+        hfov: 120,
+        hotSpots: [
+          {
+            pitch: -5,
+            yaw: -5,
+            type: "scene",
+            text: "Avanzar",
+            sceneId: "ext_06"
+          }
+        ]
+      },
     }
   });
 </script>
