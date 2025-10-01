@@ -4,10 +4,12 @@ import Footer from '../components/Footer.astro';
 import Layout from '../layouts/Layout.astro';
 import Visor from "../components/Visor.astro";
 import MapSection from '../components/MapSection.astro';
+import Butons from '../components/Buttons.astro';
+import "./styles.css";
 ---
 
 <Layout>
-	<main class="h-screen">
+	<main>
 		<Navbar />
 		<section class="min-h-screen flex items-center justify-center px-4 py-8" id="main-section">
         <div class="max-w-7xl mx-auto w-full">
@@ -17,25 +19,18 @@ import MapSection from '../components/MapSection.astro';
                     <!-- Título -->
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                         Explora el
-                        <span class="text-blue-600">Mapa interactivo</span>
-						de la UCT
+                        <span class="gradientText">Mapa interactivo</span>
+						            de la UCT
                     </h1>
                     
                     <!-- Subtítulo -->
                     <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto lg:mx-0">
                         Recorre nuestro campus de manera digital. Encuentra aulas, bibliotecas, 
-						cafeterias y mucho más desde cualquier dispositivo.
+						            cafeterias y mucho más desde cualquier dispositivo.
                     </p>
                     
                     <!-- Botones -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <button class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-                            Ver mapa
-                        </button>
-                        <button class="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold text-lg hover:border-gray-200 hover:scale-105 hover:bg-gray-50 transition-all duration-200">
-                            Más Información
-                        </button>
-                    </div>
+                    <Butons />
                 </div>
                 
                 <!-- Imagen derecha -->
@@ -45,27 +40,30 @@ import MapSection from '../components/MapSection.astro';
             </div>
         </div>
     <!-- Botón de desplazamiento -->
-		<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
-			<a href="#visor-section" class="scroll-btn w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
-        	<svg class="w-6 h-6 text-white bounce-arrow group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 ">
+			<a href="#map-section" class="magnetic-btn scroll-btn w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-500 hover:bg-blue-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+        	<svg class="w-7 h-7 text-white bounce-arrow group-hover:translate-y-1 transition-transform duration-300 pt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         	</svg>
     		</a>
 		</div>
-		
-
     </section>
-  </main>
 
-	<section class="flex items-center bg-gray-200 h-screen" id="visor-section">
-		<div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[80vh] mx-auto mt-15">
-			<Visor />
-		</div>
-	</section>
-    
-	<MapSection />
+    <!-- Sección del mapa interactivo -->
+    <section class="pt-20" id="map-section">
+      <MapSection />
+    </section>
+
+    <!-- Sección del visor 3D -->
+    <p class="flex text-gray-900 text-3xl font-semibold mb-4 justify-center items-center">Nuestro tour virtual</p>
+	  <section class="flex items-center bg-gray-200 h-[90vh]:" id="visor-section">
+		  <div class=" justify-center w-full h-[60vh] md:w-[70vw] md:h-[80vh] mx-auto pb-12">
+			  <Visor />
+		  </div>
+	  </section>
 
 	<Footer />
+  </main>
 </Layout>
 <script>
       import Lenis from 'lenis';
@@ -75,10 +73,12 @@ import MapSection from '../components/MapSection.astro';
         const lenis = new Lenis({
           duration: 1.2,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          // @ts-ignore
           smooth: true
         });
 
         // Loop de animación para Lenis
+        // @ts-ignore
         function raf(time) {
           lenis.raf(time);
           requestAnimationFrame(raf);
@@ -89,6 +89,7 @@ import MapSection from '../components/MapSection.astro';
         const scrollButtons = document.querySelectorAll('[href^="#"]');
         scrollButtons.forEach(button => {
           button.addEventListener('click', function(e) {
+            // @ts-ignore
             const href = this.getAttribute('href');
             if (href.startsWith('#')) {
               e.preventDefault();
@@ -97,4 +98,103 @@ import MapSection from '../components/MapSection.astro';
           });
         });
       });
-    </script>
+
+      // Efecto magnético para los botones
+    const magneticButtons = document.querySelectorAll('.magnetic-btn');
+    
+    magneticButtons.forEach(button => {
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            // Distancia de atracción (ajusta este valor para más o menos magnetismo)
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = 150; // Radio de atracción en píxeles
+            
+            if (distance < maxDistance) {
+                const strength = (1 - distance / maxDistance) * 0.5; // Fuerza del magnetismo
+                const moveX = x * strength;
+                const moveY = y * strength;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+            }
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+        
+        // Efecto para touch en móviles
+        button.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const rect = button.getBoundingClientRect();
+            const x = touch.clientX - rect.left - rect.width / 2;
+            const y = touch.clientY - rect.top - rect.height / 2;
+            
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = 100;
+            
+            if (distance < maxDistance) {
+                const strength = (1 - distance / maxDistance) * 0.4;
+                const moveX = x * strength;
+                const moveY = y * strength;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+            }
+        });
+        
+        button.addEventListener('touchend', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+
+    // Efecto magnético para botones pequeños
+    const magneticSmallButtons = document.querySelectorAll('.magnetic-btn-small');
+    
+    magneticSmallButtons.forEach(button => {
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = 75; // Radio más pequeño para botones pequeños
+            
+            if (distance < maxDistance) {
+                const strength = (1 - distance / maxDistance) * 0.3; // Movimiento más sutil
+                const moveX = x * strength;
+                const moveY = y * strength;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.03)`;
+            }
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+        
+        // Touch para móviles
+        button.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const rect = button.getBoundingClientRect();
+            const x = touch.clientX - rect.left - rect.width / 2;
+            const y = touch.clientY - rect.top - rect.height / 2;
+            
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = 80;
+            
+            if (distance < maxDistance) {
+                const strength = (1 - distance / maxDistance) * 0.25;
+                const moveX = x * strength;
+                const moveY = y * strength;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.03)`;
+            }
+        });
+        
+        button.addEventListener('touchend', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+</script>

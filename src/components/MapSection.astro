@@ -1,16 +1,19 @@
 ---
 // src/components/MapSection.astro - Imagen más grande
+import "../components/MapSection.css";
+
 ---
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 
 <!-- Contenedor del mapa con altura adaptativa -->
-<div class="w-full flex flex-col lg:flex-row h-screen lg:min-h-0 lg:justify-center lg:items-start lg:max-w-[1440px] lg:mx-auto lg:px-4">
+<p class="flex text-gray-900 text-3xl font-semibold mb-4 justify-center items-center">Explora nuestro campus</p>
+<div class="w-full flex flex-col lg:flex-row h-screen lg:min-h-0 lg:justify-center lg:items-start lg:max-w-[1440px] lg:mx-auto lg:px-4 lg:pl-28">
   <!-- Panel de filtros vertical -->
+   
   <div id="filter-panel" class="w-full lg:w-60 xl:w-64 p-3 bg-gray-100 rounded-lg lg:rounded-r-none shadow-sm flex flex-col gap-2 overflow-y-auto max-h-[40vh] lg:max-h-[80vh] order-2 lg:order-1">
-    <h3 class="font-bold text-lg mb-2 flex items-center justify-center lg:justify-start">
+    <h3 class="font-semibold text-lg flex items-center justify-center lg:justify-start">
       Filtros 
-      <img src="funnel.svg" alt="" width="20" height="20" class="ml-1">
     </h3>
     
     <div class="flex flex-col gap-2">
@@ -158,12 +161,22 @@
       </label>
 
       <div class="flex gap-2 mt-2 items-center justify-center">
-        <button id="select-all" class="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm transition-colors">Todos</button>
-        <button id="deselect-all" class="px-2 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm transition-colors">Ninguno</button>
+        <!-- Botón Todos -->
+        <button id="select-all" class="magnetic-btn-small bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-lg hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 border-2 border-transparent hover:border-blue-300">
+            Todos
+        </button>
+    
+        <!-- Botón Ninguno -->
+        <button id="deselect-all" class="magnetic-btn-small bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-lg hover:shadow-xl hover:shadow-gray-500/40 transition-all duration-300 border-2 border-transparent hover:border-gray-400">
+            Ninguno
+        </button>
       </div>
 
-      <button id="fullscreen-btn" class="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm flex items-center justify-center gap-1">
-          <span id="fullscreen-icon"><img src="fullscreen.svg" alt="" width="18" height="18"></span>
+      <!-- Botón Pantalla Completa -->
+      <button id="fullscreen-btn" class="magnetic-btn-small bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm shadow-lg hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 flex items-center justify-center gap-2 border-2 border-transparent hover:border-blue-300">
+          <span id="fullscreen-icon">
+              <img src="fullscreen.svg" alt="" width="18" height="18" class="brightness-0 invert">
+          </span>
           <span id="fullscreen-text">Pantalla Completa</span>
       </button>
     </div>
@@ -174,8 +187,8 @@
     <div id="map-wrapper" class="relative  lg:rounded-l-none overflow-hidden bg-gray-200 w-full h-[50vh] sm:h-[60vh] lg:h-[80vh] max-w-full">
       <div id="enhanced-map" class="w-full h-full lg:w-[112vh] transition-all duration-300"></div>
       
-      <button id="exit-fullscreen" class="hidden absolute top-4 right-4 z-[1000] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
-        <img src="shrink.svg" alt="" width="18" height="18"> Salir
+      <button id="exit-fullscreen" class="hidden flex absolute top-4 right-4 z-[1000] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+        <img src="shrink.svg" alt="" width="18" height="18"> <p class="ml-2">Salir</p>
       </button>
     </div>
   </div>
@@ -183,13 +196,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
   // Variables globales
-  let map = {}, bounds = {}, width = {}, height = {};
-  let customMarkers = [];
+  // @ts-ignore
+  let map: L.Map;
+  // @ts-ignore
+  let bounds: L.LatLngBoundsExpression;
+  let width: number = 0;
+  let height: number = 0;
 
   // Configurar iconos por defecto
+  // @ts-ignore
   delete L.Icon.Default.prototype._getIconUrl;
+  // @ts-ignore
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
@@ -199,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Crear un icono personalizado con SVG
     // iconPath: ruta de tu SVG sin fondo
     // color: color de fondo del marcador
+    // @ts-ignore
     const createMarkerWithSVG = (iconPath, color) => L.divIcon({
       html: `
         <svg width="35" height="45" viewBox="0 0 24 24">
@@ -233,10 +254,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const img = new Image();
   
   img.onload = function() {
+  // @ts-ignore
   width = this.naturalWidth;
+  // @ts-ignore
   height = this.naturalHeight;
-
+  // @ts-ignore
   map = L.map('enhanced-map', {
+    // @ts-ignore
     crs: L.CRS.Simple,
     maxBounds: bounds,
     maxBoundsViscosity: 1.0,
@@ -256,6 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bounds = [[0, 0], [height, width]];
     
     // Agregar imagen
+    // @ts-ignore
     L.imageOverlay('/Map.png', bounds).addTo(map);
 
     // Ajustar la vista exactamente a la imagen
@@ -281,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { pos: [height * 0.767, width * 0.45], name: "Edificio 14", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
         { pos: [height * 0.654, width * 0.376], name: "Edificio 15", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
         { pos: [height * 0.497, width * 0.255], name: "Edificio 16", type: "edificio", description: "Edificio de carrerras tecnicas" },
-        { pos: [height * 0.418, width * 0.233], name: "Edificio 17", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
+        { pos: [height * 0.418, width * 0.233], name: "Edificio 17", type: "edificio", description: "Edificio con apartado de informatica y enfermeria" },
         { pos: [height * 0.36, width * 0.597], name: "Edificio 21", type: "edificio", description: "Edificio con salas de clase, baños y sala de estar" },
         { pos: [height * 0.35, width * 0.47], name: "Biblioteca Central", type: "libreria", description: "Recursos académicos y salas de estudio" },
         { pos: [height * 0.49, width * 0.64], name: "Cafetería", type: "comer", description: "Cafeteria para todo publico" },
@@ -294,46 +319,59 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     // Guardamos referencias a los marcadores por tipo
-    const markersByType = {};
+    // @ts-ignore
+    const markersByType: Record<string, L.Marker[]> = {};
 
-    // Crear marcadores y agregarlos al mapa
-    predefinedMarkers.forEach(marker => {
-        const icon = customIcons[marker.type];
-        if (!icon) return;
+// Crear marcadores y agregarlos al mapa
+predefinedMarkers.forEach(marker => {
+  // @ts-ignore
+  const icon = customIcons[marker.type];
+  if (!icon) return;
+  // @ts-ignore
+  const leafletMarker = L.marker(marker.pos, { icon })
+    .addTo(map)
+    .bindPopup(
+      `
+      <div class="p-2">
+        <h3 class="font-bold text-lg mb-2">${marker.name}</h3>
+        <p class="text-sm text-gray-600 mb-2">${marker.description}</p>
+        <div class="text-xs text-gray-500">
+          <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Ir a vista 360
+          </button>
+        </div>
+      </div>
+      `,
+      {
+        autoPan: true, // Ajusta la vista para mostrar el popup completo
+        autoPanPadding: [10, 10], // Padding alrededor del popup
+        keepInView: true, // Mantiene el popup visible en el mapa
+      }
+    );
 
-        const leafletMarker = L.marker(marker.pos, { icon })
-          .addTo(map)
-          .bindPopup(`
-            <div class="p-2">
-              <h3 class="font-bold text-lg mb-2">${marker.name}</h3>
-              <p class="text-sm text-gray-600 mb-2">${marker.description}</p>
-              <div class="text-xs text-gray-500">
-                <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Ir a vista 360</button>
-            </div>
-          `, {
-            autoPan: true, // Automáticamente ajusta la vista para mostrar el popup completo
-            autoPanPadding: [10, 10], // Padding alrededor del popup
-            keepInView: true // Mantiene el popup visible en el mapa
-          });
-        // Guardar referencia por tipo
-        if (!markersByType[marker.type]) markersByType[marker.type] = [];
-        markersByType[marker.type].push(leafletMarker);
+  // Guardar referencia por tipo
+  if (!markersByType[marker.type]) {
+    markersByType[marker.type] = [];
+  }
+  markersByType[marker.type].push(leafletMarker);
+});
+
+// Función para actualizar visibilidad según checkbox
+function updateMarkers() {
+  document.querySelectorAll<HTMLInputElement>('.marker-filter').forEach(cb => {
+    const type = cb.dataset.type!;
+    const show = cb.checked;
+
+    markersByType[type]?.forEach(marker => {
+      if (show) {
+        marker.addTo(map);
+      } else {
+        map.removeLayer(marker);
+      }
     });
+  });
+}
 
-    // Función para actualizar visibilidad según checkbox
-    function updateMarkers() {
-      document.querySelectorAll('.marker-filter').forEach(cb => {
-        const type = cb.dataset.type;
-        const show = cb.checked;
-        markersByType[type]?.forEach(marker => {
-          if (show) {
-            marker.addTo(map);
-          } else {
-            map.removeLayer(marker);
-          }
-        });
-      });
-    }
 
     // Event listeners para checkboxes
     document.querySelectorAll('.marker-filter').forEach(cb => {
@@ -342,14 +380,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Botones Todos/Ninguno
     document.getElementById('select-all')!.addEventListener('click', () => {
-      document.querySelectorAll('.marker-filter').forEach(cb => cb.checked = true);
+      document.querySelectorAll<HTMLInputElement>('.marker-filter').forEach(cb => cb.checked = true);
+      updateMarkers();
+    });
+    
+    document.getElementById('deselect-all')!.addEventListener('click', () => {
+      document.querySelectorAll<HTMLInputElement>('.marker-filter').forEach(cb => cb.checked = false);
       updateMarkers();
     });
 
-    document.getElementById('deselect-all')!.addEventListener('click', () => {
-      document.querySelectorAll('.marker-filter').forEach(cb => cb.checked = false);
-      updateMarkers();
-    });
 
     // Eventos para mejorar la experiencia
     map.on('zoom', function() {
@@ -428,219 +467,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
-
-<style>
-#enhanced-map {
-  z-index: 1;
-}
-
-/* Estilos para pantalla completa */
-#map-wrapper:fullscreen {
-  background: black;
-}
-
-#map-wrapper:fullscreen #enhanced-map {
-  width: 100vw !important;
-  height: 100vh !important;
-  border-radius: 0;
-}
-
-
-/* Estilos para iconos personalizados */
-.custom-div-icon {
-  background: transparent !important;
-  border: none !important;
-}
-
-/* Mejorar controles de Leaflet */
-.leaflet-control-zoom {
-  border-radius: 8px !important;
-}
-
-/* Ocultar la atribución de Leaflet */
-.leaflet-control-attribution {
-  display: none !important;
-}
-
-
-.leaflet-control-zoom a {
-  border-radius: 4px;
-}
-
-/* Mejorar popups */
-.leaflet-popup-content {
-  font-family: inherit;
-  margin: 8px 12px;
-}
-
-.leaflet-popup-content-wrapper {
-  border-radius: 8px;
-}
-
-/* Responsive improvements */
-@media (max-width: 640px) {
-  .leaflet-control-zoom {
-    transform: scale(1.2);
-  }
-  
-  .leaflet-popup-content {
-    font-size: 14px;
-  }
-}
-
-/* Animaciones suaves */
-.transition-colors {
-  transition: background-color 0.2s ease;
-}
-
-/* Mejorar accesibilidad táctil */
-@media (pointer: coarse) {
-  button {
-    min-height: 44px;
-  }
-  
-  .leaflet-control-zoom a {
-    width: 34px;
-    height: 34px;
-    line-height: 34px;
-  }
-}
-
-/* From Uiverse.io by kyle1dev */ 
-.checkbox-container {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: 16px;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -2px rgba(0, 0, 0, 0.05);
-}
-
-/* Reemplaza la regla .ios-checkbox por esta */
-.ios-checkbox {
-  --checkbox-size: 21px;
-  --checkbox-color: #3b82f6;
-  --checkbox-bg: #dbeafe;
-  --checkbox-border: #93c5fd;
-
-  position: relative;
-  display: inline-flex;        /* <-- cambiar a inline-flex */
-  align-items: center;         /* centra checkbox y texto verticalmente */
-  gap: 0.5rem;                 /* espacio entre checkbox y texto */
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-
-.ios-checkbox input {
-  display: none;
-}
-
-.checkbox-wrapper {
-  position: relative;
-  width: var(--checkbox-size);
-  height: var(--checkbox-size);
-  border-radius: 8px;
-  transition: transform 0.2s ease;
-}
-
-.checkbox-bg {
-  position: absolute;
-  inset: 0;
-  border-radius: 8px;
-  border: 2px solid var(--checkbox-border);
-  background: white;
-  transition: all 0.2s ease;
-}
-
-.checkbox-icon {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 80%;
-  height: 80%;
-  color: white;
-  transform: scale(0);
-  transition: all 0.2s ease;
-}
-
-.check-path {
-  stroke-dasharray: 40;
-  stroke-dashoffset: 40;
-  transition: stroke-dashoffset 0.3s ease 0.1s;
-}
-
-/* Checked State */
-.ios-checkbox input:checked + .checkbox-wrapper .checkbox-bg {
-  background: var(--checkbox-color);
-  border-color: var(--checkbox-color);
-}
-
-.ios-checkbox input:checked + .checkbox-wrapper .checkbox-icon {
-  transform: scale(1);
-}
-
-.ios-checkbox input:checked + .checkbox-wrapper .check-path {
-  stroke-dashoffset: 0;
-}
-
-/* Hover Effects */
-.ios-checkbox:hover .checkbox-wrapper {
-  transform: scale(1.05);
-}
-
-/* Active Animation */
-.ios-checkbox:active .checkbox-wrapper {
-  transform: scale(0.95);
-}
-
-/* Focus Styles */
-.ios-checkbox input:focus + .checkbox-wrapper .checkbox-bg {
-  box-shadow: 0 0 0 4px var(--checkbox-bg);
-}
-
-/* Color Themes */
-.ios-checkbox.blue {
-  --checkbox-color: #3b82f6;
-  --checkbox-bg: #dbeafe;
-  --checkbox-border: #93c5fd;
-}
-
-.ios-checkbox.green {
-  --checkbox-color: #10b981;
-  --checkbox-bg: #d1fae5;
-  --checkbox-border: #6ee7b7;
-}
-
-.ios-checkbox.purple {
-  --checkbox-color: #8b5cf6;
-  --checkbox-bg: #ede9fe;
-  --checkbox-border: #c4b5fd;
-}
-
-.ios-checkbox.red {
-  --checkbox-color: #ef4444;
-  --checkbox-bg: #fee2e2;
-  --checkbox-border: #fca5a5;
-}
-
-/* Animation */
-@keyframes bounce {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.ios-checkbox input:checked + .checkbox-wrapper {
-  animation: bounce 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-
-</style>

@@ -1,0 +1,85 @@
+<div class="flex flex-col sm:flex-row gap-7 justify-center lg:justify-start">
+    <!-- Botón principal -->
+    <button class="magnetic-btn bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transition-shadow duration-300">
+        <span class="flex items-center gap-2">
+            Ver mapa
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </span>
+    </button>
+    
+    <!-- Botón secundario -->
+    <button class="magnetic-btn backdrop-blur-sm bg-white/90 border-2 border-gray-300/70 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg shadow-xl hover:shadow-xl hover:border-blue-300 transition-all duration-300">
+        <span class="flex items-center gap-2">
+            Más Información
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </span>
+    </button>
+</div>
+
+<script>
+    // Efecto magnético para los botones
+    const magneticButtons = document.querySelectorAll('.magnetic-btn');
+    
+    magneticButtons.forEach(button => {
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            // Distancia de atracción (ajusta este valor para más o menos magnetismo)
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = 150; // Radio de atracción en píxeles
+            
+            if (distance < maxDistance) {
+                const strength = (1 - distance / maxDistance) * 0.5; // Fuerza del magnetismo
+                const moveX = x * strength;
+                const moveY = y * strength;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+            }
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+        
+        // Efecto para touch en móviles
+        button.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const rect = button.getBoundingClientRect();
+            const x = touch.clientX - rect.left - rect.width / 2;
+            const y = touch.clientY - rect.top - rect.height / 2;
+            
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = 100;
+            
+            if (distance < maxDistance) {
+                const strength = (1 - distance / maxDistance) * 0.4;
+                const moveX = x * strength;
+                const moveY = y * strength;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+            }
+        });
+        
+        button.addEventListener('touchend', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+</script>
+
+<style>
+    .magnetic-btn {
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .magnetic-btn:active {
+        transform: scale(0.95) !important;
+    }
+</style>

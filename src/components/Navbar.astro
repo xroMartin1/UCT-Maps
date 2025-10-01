@@ -1,5 +1,13 @@
 ---
-import LogoUCT from "../assets/UCT_Logo.png";
+// Obtener la ruta actual
+const currentPath = Astro.url.pathname;
+
+// Función para verificar si el link está activo
+const isActive = (path: string) => {
+  if (path === '/' && currentPath === '/') return true;
+  if (path !== '/' && currentPath.startsWith(path)) return true;
+  return false;
+};
 ---
 
 <header class="fixed top-0 w-full bg-white/95 backdrop-blur-lg shadow-lg z-50 border-b border-gray-100">
@@ -7,29 +15,53 @@ import LogoUCT from "../assets/UCT_Logo.png";
     <div class="flex items-center justify-between h-16 md:h-20">
       <!-- Logo -->
       <div class="flex items-center">
-        <img src={LogoUCT.src} alt="Logo UCT" class="h-10 w-auto md:h-12" />
+        <img src="logo.png" alt="Logo UCT" class="h-10 w-auto md:h-12" />
       </div>
 
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
         <ul class="flex space-x-8 lg:space-x-12">
           <li>
-            <a href="#main-section" class="nav-link text-blue-600 font-semibold px-3 py-2 text-sm lg:text-base relative border-b-2 border-blue-600">
+            <a 
+              href="/" 
+              class={`nav-link px-3 py-2 text-sm lg:text-base font-medium relative transition-colors ${
+                isActive('/') 
+                  ? 'text-blue-600 font-semibold border-blue-600' 
+                  : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
               Inicio
             </a>
           </li>
           <li>
-            <a href="#visor-section" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 text-sm lg:text-base font-medium relative transition-colors">
+            <a 
+              href="/#visor-section" 
+              class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 text-sm lg:text-base font-medium relative transition-colors"
+            >
               Mapa
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 text-sm lg:text-base font-medium relative transition-colors">
+            <a 
+              href="/information" 
+              class={`nav-link px-3 py-2 text-sm lg:text-base font-medium relative transition-colors ${
+                isActive('/information') 
+                  ? 'text-blue-600 font-semibold border-blue-600' 
+                  : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
               Información
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 text-sm lg:text-base font-medium relative transition-colors">
+            <a 
+              href="/contacts" 
+              class={`nav-link px-3 py-2 text-sm lg:text-base font-medium relative transition-colors ${
+                isActive('/contacts') 
+                  ? 'text-blue-600 font-semibold border-blue-600' 
+                  : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
               Contacto
             </a>
           </li>
@@ -46,22 +78,47 @@ import LogoUCT from "../assets/UCT_Logo.png";
   </div>
 
   <!-- Mobile Navigation -->
-<div id="mobile-menu" class="overflow-hidden max-h-0 opacity-0 md:hidden bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-lg transition-all duration-300 ease-in-out">
-  <div class="px-4 py-6 space-y-4">
-    <a href="#" class="block text-blue-600 font-semibold py-3 px-4 rounded-lg bg-blue-50 text-base">
-      Inicio
-    </a>
-    <a href="#" class="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-3 px-4 rounded-lg text-base font-medium transition-all">
-      Mapa
-    </a>
-    <a href="#" class="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-3 px-4 rounded-lg text-base font-medium transition-all">
-      Información
-    </a>
-    <a href="#" class="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-3 px-4 rounded-lg text-base font-medium transition-all">
-      Contacto
-    </a>
+  <div id="mobile-menu" class="overflow-hidden max-h-0 opacity-0 md:hidden bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-lg transition-all duration-300 ease-in-out">
+    <div class="px-4 py-6 space-y-4">
+      <a 
+        href="/" 
+        class={`block py-3 px-4 rounded-lg text-base ${
+          isActive('/') 
+            ? 'text-blue-600 font-semibold bg-blue-50' 
+            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-all'
+        }`}
+      >
+        Inicio
+      </a>
+      <a 
+        href="/#visor-section" 
+        class="block text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-3 px-4 rounded-lg text-base font-medium transition-all"
+      >
+        Mapa
+      </a>
+      <a 
+        href="/information" 
+        class={`block py-3 px-4 rounded-lg text-base ${
+          isActive('/information') 
+            ? 'text-blue-600 font-semibold bg-blue-50' 
+            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-all'
+        }`}
+      >
+        Información
+      </a>
+      <a 
+        href="/contacts" 
+        class={`block py-3 px-4 rounded-lg text-base ${
+          isActive('/contacts') 
+            ? 'text-blue-600 font-semibold bg-blue-50' 
+            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-all'
+        }`}
+      >
+        Contacto
+      </a>
+    </div>
   </div>
-</div>
+</header>
 
 <script>
   const btn = document.getElementById('mobile-menu-btn');
